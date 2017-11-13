@@ -1,0 +1,15 @@
+DirectoryIndex index.php index.html noindex.html
+IndexIgnore *
+RewriteEngine on
+Options +FollowSymLinks
+RewriteBase /
+ErrorDocument 404 /404
+ErrorDocument 403 /404
+
+RewriteCond %{HTTP_HOST} ^old.booklot.ru [NC]
+RewriteRule ^(.*)$ http://www.booklot.ru/ [L,R=301,NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z0-9_\/\.\-\[\]]+)/?$ /index.php?url=/$1 [QSA]
+php_flag  display_errors 0
