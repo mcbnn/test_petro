@@ -1,0 +1,21 @@
+<nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+        <li class="breadcrumb-item"><a href="/add_page/">Добавить запись</a></li>
+        <?if(isset($_GET['pageId']) and !empty((int)$_GET['pageId'])):?>
+            <li class="breadcrumb-item"><a href="/redactor_page/?pageId=<?=$_GET['pageId'];?>">Редактировать запись</a></li>
+            <li class="breadcrumb-item"><a onclick="alertRemove('/remove_page/?pageId=<?=$_GET['pageId'];?>')" href="#">Удалить запись</a></li>
+        <?endif;?>
+    </ol>
+</nav>
+
+<script>
+
+    function alertRemove(url){
+
+        if (confirm("Вы действительно хотите удалить запись")) {
+            window.location.href  = url;
+        }
+    }
+
+</script>

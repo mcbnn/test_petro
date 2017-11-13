@@ -1,0 +1,36 @@
+<h1>Форма для редактирования страницы.</h1>
+<form method="POST">
+    <? foreach ($form as $value): ?>
+        <div class="form-group">
+            <label><?= $value['label']; ?>
+                <?
+                switch ($value['field']) {
+                    case 'input': ?>
+
+                        <input
+                            <?
+                            if (isset($value['value'])): ?>
+                                value="<?= htmlentities($value['value']); ?>"
+                            <?endif; ?>
+                            <?= http_build_query($value['data'], '', ' '); ?>
+                        />
+                        <?
+                        break;
+                    case 'textarea': ?>
+                        <textarea <?= http_build_query($value['data'], '', ' '); ?> ><?
+                            if (isset($value['value'])): ?><?= htmlentities($value['value']); ?><?endif ?></textarea>
+                        <?
+                        ;
+                        break;
+                }
+                ?>
+                <? if (isset($value['error'])): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= $value['error']; ?>
+                    </div>
+                <? endif; ?>
+            </label>
+        </div>
+    <? endforeach; ?>
+    <input type="submit" value="Сохранить"/>
+</form>

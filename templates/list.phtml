@@ -1,0 +1,19 @@
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-sm-12 blog-main">
+            <div class="blog-post">
+                <?php
+                $pages = $paginator->getRows();
+                if (count($pages) > 0): ?>
+                    <? foreach ($pages as $page): ?>
+                        <h2 class="blog-post-title"><?= $page['title']; ?> pageId = <?= $page['pageId']; ?></h2>
+                        <p class="blog-post-meta"><?= date('d.m.Y H:i:s', strtotime($page['modified'])) ?></p>
+                        <p><?= $page['body']; ?></p>
+                        <p><a href="/one_page/?pageId=<?= $page['pageId'] ?>">Читать далее</a></p>
+                    <? endforeach; ?>
+                <? endif; ?>
+            </div>
+            <?php echo $paginator->markup(); ?>
+        </div>
+    </div>
+</main>
