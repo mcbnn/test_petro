@@ -7,22 +7,18 @@ class DB {
     private $connection = null;
 
     /**
-     * @return null|\PDO
+     * @return \MySQLi|null
      */
     public function getConnection()
     {
         if (!$this->connection) {
 
-            $dsn = 'mysql:host=' . DB_FB_HOST . ';dbname=' . DB_FB_NAME . ';charset=' . DB_FB_CHARSET ;
+            $this->connection = new \MySQLi(DB_FB_HOST, DB_FB_USER, DB_FB_PASSWORD, DB_FB_NAME);
 
-            $this->connection = new \PDO($dsn, DB_FB_USER, DB_FB_PASSWORD, [
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING
-                ]
-            );
-
-	        $stmt = $this->connection->query('SET NAMES utf8');
-	        $stmt->execute();
+            if (!$this->connection) {
+                printf("Невозможно подключиться к базе данных. Код ошибки: %s\n", mysqli_connect_error());
+                exit;
+            }
         }
 
         return $this->connection;

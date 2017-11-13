@@ -96,7 +96,7 @@ class IndexController {
             $getForm = $pageModel->validatePost();
             if (!$pageModel->errForm) {
 
-                if ($pageModel->updateModel($pageId) == '00000') {
+                if ($pageModel->updateModel($pageId) == '') {
                     header("Location: /save_page/");
                 }
             }
@@ -121,7 +121,7 @@ class IndexController {
             $getForm = $pageModel->validatePost();
             if (!$pageModel->errForm) {
 
-                if ($pageModel->saveModel() == '00000') {
+                if ($pageModel->saveModel() == '') {
                     header("Location: /save_page/");
                 }
             }
@@ -143,7 +143,7 @@ class IndexController {
 
         if ($pageId == 0) die('Нет Id записи');
 
-        if ($pageModel->removeId($pageId) == '00000') {
+        if ($pageModel->removeId($pageId) == '') {
             header("Location: /");
         } else {
             die("Возникла проблема при удаление записи");

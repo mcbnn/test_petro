@@ -29,7 +29,7 @@ class Paginator {
      * @param \PDO $connection
      * @param array $sql
      */
-    public function __construct(\PDO $connection, array $sql)
+    public function __construct(\MySqli $connection, array $sql)
     {
         $this->connection = $connection;
         $this->sql = $sql;
@@ -64,24 +64,18 @@ class Paginator {
         }
 
         $sqlWithLimit = $sql . ' LIMIT ' . $page * $limit . ','. $limit;
-        $stmt = $this->connection->prepare($sqlWithLimit);
 
-        foreach($params as $key => $value) {
-            $stmt->bindValue($key, $value);
-        }
+        $result = mysqli_query( $this->connection, $sqlWithLimit);
 
-        $stmt->execute();
-        $this->rows = $stmt->fetchAll();
+        $this->rows = mysqli_fetch_all($result,MYSQLI_ASSOC);
 
         // Get Pagination
-        $stmt = $this->connection->prepare('SELECT COUNT(*) FROM (' . $sql .' ) pagination');
-        foreach($params as $key => $value) {
-            $stmt->bindValue($key, $value);
-        }
 
-        $stmt->execute();
+        $result = mysqli_query($this->connection, 'SELECT COUNT(*) FROM (' . $sql .' ) pagination');
 
-        $this->totalRows = $stmt->fetchColumn();
+
+        $this->totalRows = $result->fetch_array();
+        $this->totalRows = $this->totalRows[0];
 
         $this->pages = ceil($this->totalRows / $limit);
     }

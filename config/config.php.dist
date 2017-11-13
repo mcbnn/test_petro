@@ -1,0 +1,12 @@
+<?php
+
+define('DB_FB_USER','');
+
+define('DB_FB_PASSWORD','');
+
+define('DB_FB_HOST','');
+
+define('DB_FB_NAME', '');
+
+define('DB_FB_CHARSET', '');
+

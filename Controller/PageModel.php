@@ -57,31 +57,6 @@ class PageModel {
 
     }
 
-    /**
-     * @param $pageId
-     * @return string
-     */
-    public function updateModel($pageId) {
-
-        $connection = $this->db->getConnection();
-        $stmt = $connection->prepare("UPDATE pet__page set title = :title, body = :body, keywords = :keywords, modified = :modified WHERE pageId = :pageId");
-        $_POST['pageId'] = $pageId;
-        $stmt->execute($_POST);
-
-        return $stmt->errorCode();
-    }
-
-    /**
-     * @return string
-     */
-    public function saveModel() {
-
-        $connection = $this->db->getConnection();
-        $stmt = $connection->prepare("INSERT INTO pet__page (title, body, keywords, modified) VALUES (:title, :body, :keywords, :modified);");
-        $stmt->execute($_POST);
-
-        return $stmt->errorCode();
-    }
 
     /**
      * @return array
@@ -179,38 +154,56 @@ class PageModel {
      */
     public function getById($id) {
         $connection = $this->db->getConnection();
+        $result = mysqli_query($connection, "SELECT * FROM pet__page WHERE pageId = $id ");
+        $result = $result->fetch_array(MYSQLI_ASSOC);
 
-        $stmt = $connection->prepare("SELECT * FROM pet__page WHERE pageId = :pageId ");
-
-        if (!$stmt) {
+        if (!$result) {
             return [];
         } else {
-
-            $stmt->bindValue('pageId', $id);
-            $stmt->execute();
-            return $stmt->fetch();
-
+            return $result;
         }
     }
+
+    /**
+     * @param $pageId
+     * @return string
+     */
+    public function updateModel($pageId) {
+
+        $connection = $this->db->getConnection();
+        $stmt = $connection->prepare("UPDATE pet__page set title = ?, body = ?, keywords = ?, modified = ? WHERE pageId = ?");
+        $stmt->bind_param('sssss', $_POST['title'], $_POST['body'], $_POST['keywords'], $_POST['modified'], $pageId);
+        $stmt->execute();
+
+        return $stmt->error;
+    }
+
+    /**
+     * @return string
+     */
+    public function saveModel() {
+
+        $connection = $this->db->getConnection();
+        $stmt = $connection->prepare("INSERT INTO pet__page (title, body, keywords, modified) VALUES (?, ?, ?, ?);");
+        $stmt->bind_param('ssss', $_POST['title'], $_POST['body'], $_POST['keywords'], $_POST['modified']);
+        $stmt->execute();
+
+        return $stmt->error;
+    }
+
 
     /**
      * @param $id
      * @return array|string
      */
     public function removeId($id) {
+
         $connection = $this->db->getConnection();
-        $stmt = $connection->prepare("DELETE FROM pet__page WHERE pageId = :pageId");
+        $stmt = $connection->prepare("DELETE FROM pet__page WHERE pageId = ?");
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
 
-        if (!$stmt) {
-            return [];
-        } else {
-
-            $stmt->bindValue('pageId', $id);
-            $stmt->execute();
-            return $stmt->errorCode();
-
-        }
+        return $stmt->error;
     }
-
 
 }
